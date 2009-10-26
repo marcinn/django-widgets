@@ -12,12 +12,10 @@ def _parse_args(bits, parser):
     if len(bits) < 2:
         raise TemplateSyntaxError("'%s' takes at least one argument"
                                   " (registered widget name)" % bits[0])
-    if len(bits)>2:
-        if '=' in bits[2]:
-            # there is no value arg
-            value = None
-        else:
-            value = parser.compile_filter(bits[2])
+    value = None
+    if len(bits)>2 and not '=' in bits[2]:
+        # there is a value arg
+        value = parser.compile_filter(bits[2])
     return (bits[1], value)
 
 
