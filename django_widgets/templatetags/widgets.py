@@ -12,22 +12,33 @@ def _parse_args(bits, parser):
     if len(bits) < 2:
         raise TemplateSyntaxError("'%s' takes at least one argument"
                                   " (registered widget name)" % bits[0])
-    return (bits[1], parser.compile_filter(bits[2]) if len(bits)>2 else None)
+    if len(bits)>2:
+        if '=' in bits[2]:
+            # there is no value arg
+            value = None
+        else:
+            value = parser.compile_filter(bits[2])
+    return (bits[1], value)
 
 
 def _parse_options(bits, parser):
     options = {}
-    opts_arg = None
-    if len(bits) > 3:
-        bits = iter(bits[3:])
+    opts_arg = []
+    if len(bits) > 2:
+        if '=' in bits[2]:
+            # there is no value arg provided
+            bits = iter(bits[2:])
+        else:
+            # skip value arg
+            bits = iter(bits[3:])
+
         for bit in bits:
-            for arg in bit.split(","):
-                if '=' in arg:
-                    k, v = arg.split('=', 1)
-                    k = k.strip()
-                    options[k] = parser.compile_filter(v)
-                elif arg:
-                    opts_arg = parser.compile_filter(arg)
+            if '=' in bit:
+                k, v = bit.split('=', 1)
+                k = k.strip()
+                options[k] = parser.compile_filter(v)
+            elif bit:
+                opts_arg.append(bit)
     return (options, opts_arg,)
 
 
@@ -56,9 +67,11 @@ class WidgetNode(Node):
         self.nodelist = nodelist
 
     def render(self, context):
-        resolved_options = dict(zip(self.options.keys(), [self.options[v].resolve(context) for v in self.options]))
+        resolved_options = dict(zip(self.options.keys(), 
+            [self.options[v].resolve(context) for v in self.options]))
         if self.opts_arg:
-            resolved_options.update(self.opts_arg.resolve(context))
+            # create dictionary from arguments (all values are set to True)
+            resolved_options.update(dict.fromkeys(self.opts_arg, True))
         widget = registry.get(self.widget_name)
         ctx = widget.get_context( 
                 self.value.resolve(context) if self.value else None, 
