@@ -79,6 +79,15 @@ class WidgetNode(Node):
         context.pop()
         return output
 
+class WidgetMediaNode(Node):
+    def __init__(self, widget_name):
+    	self.widget_name = widget_name
+
+    def render(self, context):
+        widget = registry.get(self.widget_name)
+        if hasattr(widget, 'media'):
+            return widget.media
+
 
 @register.tag(name='include_widget')
 def include_widget(parser, token):
@@ -96,3 +105,12 @@ def widget(parser, token):
     nodelist = parser.parse(('endwidget',))
     parser.delete_first_token()
     return WidgetNode(name, value, opts_arg, options, nodelist)
+
+@register.tag(name='widget_media')
+def widget_media(parser, token):
+    bits = token.split_contents()
+    if len(bits) != 2:
+        raise TemplateSyntaxError("'%s' takes only one argument"
+                                  " (registered widget name)" % bits[0])
+    name = bits[1]
+    return WidgetMediaNode(name)
