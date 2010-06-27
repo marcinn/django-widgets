@@ -11,7 +11,12 @@ often boring (ie. parsing options).
 
 Common usage of widgets is similar to ``{% with %}..{% include %}`` pair, but
 provides easy-to-use interface for more complex view-logic code.
-Major features are: class-based style and widgets registry with autodiscovering.
+
+Major features are:
+
+  - class-based style 
+  - widgets registry with autodiscovering.
+
 
 Django-widgets provides two useful templatetags with option parsers:
 
@@ -24,8 +29,9 @@ Django-widgets provides two useful templatetags with option parsers:
 
   ``{% include_widget widget_name [value] [option1=value1, [option2=value2, ...]] %}``
 
-  - ``value``: optional value passed as ``value`` in ``get_context()`` and ``render()`` methods
-  - ``opt1=val1``: dictionary key-value pairs passed as ``options`` in ``get_context()`` and ``render()``
+    - ``value``: optional value passed as ``value`` in ``get_context()`` and ``render()`` methods
+    - ``opt1=val1``: dictionary key-value pairs passed as ``options`` in ``get_context()`` and ``render()``
+
 
 
 - **widget**
