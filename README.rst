@@ -17,25 +17,25 @@ Django-widgets provides two useful templatetags with option parsers:
 
 - **include_widget**
 
-    Simply includes widget instance found in registry by name, calls widget`s 
-    ``render()`` method with provided optional value and configuration.
+  Simply includes widget instance found in registry by name, calls widget`s 
+  ``render()`` method with provided optional value and configuration.
    
-    Syntax:
+  Syntax:
 
-        ``{% include_widget widget_name [value] [option1=value1, [option2=value2, ...]] %}``
+  ``{% include_widget widget_name [value] [option1=value1, [option2=value2, ...]] %}``
 
-    - ``value``: optional value passed as ``value`` in ``get_context()`` and ``render()`` methods
-    - ``opt1=val1``: dictionary key-value pairs passed as ``options`` in ``get_context()`` and ``render()``
+  - ``value``: optional value passed as ``value`` in ``get_context()`` and ``render()`` methods
+  - ``opt1=val1``: dictionary key-value pairs passed as ``options`` in ``get_context()`` and ``render()``
 
 
 - **widget**
     
-    Same as include_widget tag, but template source is taken from tag content
-    instead of widget`s default template. 
-    
-    Everything within ``{% widget %}`` and ``{% endwidget %}`` is used as template source.
-    Also this template tag does **NOT** call widget`s ``render()`` method, but 
-    ``get_context()`` instead.
+  Same as include_widget tag, but template source is taken from tag content
+  instead of widget`s default template. 
+  
+  Everything within ``{% widget %}`` and ``{% endwidget %}`` is used as template source.
+  Also this template tag does **NOT** call widget`s ``render()`` method, but 
+  ``get_context()`` instead.
 
 
 Hints:
