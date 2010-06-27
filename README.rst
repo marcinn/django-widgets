@@ -15,31 +15,34 @@ Major features are: class-based style and widgets registry with autodiscovering.
 
 Django-widgets provides two useful templatetags with option parsers:
 
-  - `include_widget`
+- **include_widget**
+
     Simply includes widget instance found in registry by name, calls widget`s 
     render() method with provided optional value and configuration.
-    
+   
     Syntax:
 
         {% include_widget widget_name [value] [option1=value1, [option2=value2, ...]] %}
 
-      value     - optional value passed as `value` in get_context() and render() methods
-      opt1=val1 - dictionary key-value pairs passed as `options` in get_context() and render()
+    value     - optional value passed as `value` in get_context() and render() methods
+    opt1=val1 - dictionary key-value pairs passed as `options` in get_context() and render()
 
 
-  - `widget`
+- **widget**
+    
     Same as include_widget tag, but template source is taken from tag content
-    instead of widget`s default template.  Everything within {% widget %} 
-    and {% endwidget %} is used as template source.
-    Also this template tag does NOT call widget`s render() method,
-    but only get_context() instead.
+    instead of widget`s default template. 
+    
+    Everything within {% widget %} and {% endwidget %} is used as template source.
+    Also this template tag does NOT call widget`s render() method, but only 
+    get_context() instead.
 
 
 Hints:
 
-    - Context of your view will be unchanged.
-    - Context of widget contains all view variables, similar to {% with %} tag.
-      No more hacks like {{ settings.MEDIA_URL }} or {% get_media_url %} :)
+-   Context of your view will be unchanged.
+-   Context of widget contains all view variables, similar to {% with %} tag.
+    No more hacks like {{ settings.MEDIA_URL }} or {% get_media_url %} :)
 
 
 Defining a Widget
@@ -66,7 +69,7 @@ Calling from template:
 
 
 Base Widget class has render() method which uses class-property
-'''template''' for rendering. But if not set render() raises
+**template** for rendering. But if not set render() raises
 NotImplementedError.
 
 
@@ -96,7 +99,7 @@ In template:
     {% include_widget CategoryTree max_level=1 %}
     
 
-The 'catalog/category_tree_widget.html' template will be used for
+The `catalog/category_tree_widget.html` template will be used for
 rendering tree of categories. 
 
 
