@@ -93,7 +93,7 @@ Example of widget with custom template:
     class CategoryTree(Widget):
         template = 'catalog/category_tree_widget.html'
     
-        def get_context(self, root_category, options):
+        def get_context(self, root_category, options, context=None):
             return {
                 'tree': Category.objects.get_tree_for(root_category),
                 'root_category': root_category,

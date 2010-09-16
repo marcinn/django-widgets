@@ -4,6 +4,7 @@ django-widgets template tags
 
 from django.template import Library, Node, TemplateSyntaxError
 from django_widgets.loading import registry
+from django_widgets.base import context_wrapper
 
 register = Library()
 
@@ -71,9 +72,11 @@ class WidgetNode(Node):
             # create dictionary from arguments (all values are set to True)
             resolved_options.update(dict.fromkeys(self.opts_arg, True))
         widget = registry.get(self.widget_name)
-        ctx = widget.get_context( 
-                self.value.resolve(context) if self.value else None, 
-                resolved_options)
+
+        ctx = context_wrapper(widget.get_context, context)(
+            self.value.resolve(context) if self.value else None,
+            resolved_options)
+
         context.update(ctx)
         output = self.nodelist.render(context)
         context.pop()

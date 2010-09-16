@@ -10,6 +10,30 @@ from django.forms.widgets import Widget as BaseWidget
 from django.template.loader import get_template
 from loading import registry
 
+def context_wrapper(wrapped_method, context):
+    """
+    This decorator prepares args and kwargs for wrapped method.
+    Backward compatibility is achieved by inspecting method args.
+
+    Background:
+      Sometimes access to template Context is needed within widget.
+      render() method has context argument, but get_context() not.
+    
+      get_context() args are inspected and context is set as keyword
+      argument, when `context` argument exist in method`s declaration.
+    """
+    import inspect
+    kwargs = {}
+
+    _ctxargs = inspect.getargspec(wrapped_method).args
+    if 'context' in _ctxargs:
+        kwargs['context'] = context
+
+    def wrapper(widget, *args):
+        return wrapped_method(widget, *args, **kwargs)
+
+    return wrapper
+
 
 class WidgetMeta(MediaDefiningClass):
     """
@@ -57,7 +81,8 @@ class Widget(BaseWidget):
             self.template_instance = get_template(self.template)
 
         context.push()
-        context.update(self.get_context(value, attrs or {}))
+        context.update(context_wrapper(self.get_context, context)(
+            value, attrs or {}))
         result = self.template_instance.render(context)
         context.pop()
         return result
