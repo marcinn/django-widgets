@@ -25,7 +25,7 @@ def context_wrapper(wrapped_method, context):
     import inspect
     kwargs = {}
 
-    _ctxargs = inspect.getargspec(wrapped_method).args
+    _ctxargs = inspect.getargspec(wrapped_method)[0] # Python2.5 compatibility
     if 'context' in _ctxargs:
         kwargs['context'] = context
 
